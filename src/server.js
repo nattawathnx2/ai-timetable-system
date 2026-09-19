@@ -33,6 +33,12 @@ app.post("/teachers", async (req,res) => {
             department
         } = req.body;
 
+        if(!teacher_code || !first_name || !last_name){
+            return res.status(400).json({
+                error: "teacher_code, first_name and last_name are required"
+            });
+        }
+
         const result = await pool.query(
             `
             INSERT INTO teachers
