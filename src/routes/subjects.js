@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const pool = require('../db/connection');
+const pool = require("../db/connection");
 
 router.get("/", async (req,res) => {
     try {
         const result = await pool.query(
-            "SELECT * FROM teachers ORDER BY teacher_id"
+            "SELECT * FROM subjects ORDER BY subject_id"
         );
         res.json(result.rows);
     } catch (error) {
@@ -20,29 +20,30 @@ router.get("/", async (req,res) => {
 router.post("/", async (req,res) => {
     try {
         const {
-            teacher_code,
-            first_name,
-            last_name,
-            department
+            subject_code,
+            subject_name,
+            credits,
+            hours_per_week
         } = req.body;
-        if(!teacher_code || !first_name || !last_name){
+
+        if(!subject_code || !subject_name || !credits || !hours_per_week){
             return res.status(400).json({
-                error: "teacher_code, first_name and last_name are required"
+                error: "subject_code, subject_name and credits are required"
             });
         }
-
+        
         const result = await pool.query(
             `
-            INSERT INTO teachers
-            (teacher_code, first_name, last_name, department)
+            INSERT INTO subjects
+            (subject_code, subject_name, credits, hours_per_week)
             VALUES ($1,$2,$3,$4)
             RETURNING *
             `,
             [
-                teacher_code,
-                first_name,
-                last_name,
-                department
+                subject_code,
+                subject_name,
+                credits,
+                hours_per_week
             ]
         );
 
