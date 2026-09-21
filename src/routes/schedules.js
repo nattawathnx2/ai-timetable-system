@@ -5,7 +5,24 @@ const pool = require("../db/connection");
 router.get("/", async (req,res) => {
     try {
         const result = await pool.query(
-            "SELECT * FROM schedules ORDER BY schedule_id"
+            `
+            SELECT 
+                s.schedule_id, s.day_of_week,                
+                t.teacher_code, t.first_name, t.last_name,
+                sub.subject_name,
+                r.room_name,
+                g.group_name
+            FROM schedules s
+            JOIN teachers t
+                ON s.teacher_id = t.teacher_id
+            JOIN subjects sub
+                ON s.subject_id = sub.subject_id
+            JOIN rooms r
+                ON s.room_id = r.room_id
+            JOIN student_groups g
+                ON s.group_id = g.group_id
+            ORDER BY s.schedule_id;
+            `
         );
         res.json(result.rows);
     } catch (error) {
@@ -17,7 +34,24 @@ router.get("/", async (req,res) => {
 router.get("/:id", async (req,res) => {
     try {
         const result = await pool.query(
-            "SELECT * FROM schedules WHERE schedule_id = $1",[req.params.id]
+            `
+            SELECT 
+                s.schedule_id, s.day_of_week,
+                t.teacher_code, t.first_name, t.last_name,
+                sub.subject_name,
+                r.room_name,
+                g.group_name
+            FROM schedules s
+            JOIN teachers t
+                ON s.teacher_id = t.teacher_id
+            JOIN subjects sub
+                ON s.subject_id = sub.subject_id
+            JOIN rooms r
+                ON s.room_id = r.room_id
+            JOIN student_groups g
+                ON s.group_id = g.group_id
+            WHERE s.schedule_id = $1
+            `,[req.params.id]
         );
         if(result.rows.length === 0){
             return res.status(404).json({ error: "Schedules not found" });
