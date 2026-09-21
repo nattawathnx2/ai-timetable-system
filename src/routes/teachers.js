@@ -17,6 +17,25 @@ router.get("/", async (req,res) => {
     }
 });
 
+router.get("/:id", async (req,res) => {
+    try {
+        const result = await pool.query(
+            `
+            SELECT * FROM teachers WHERE teacher_id = $1
+            `, [req.params.id]
+        )
+
+        if(result.rows.length === 0){
+            return res.status(404).json({ error: "Teacher not found" });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Database Error "});
+    }
+});
+
 router.post("/", async (req,res) => {
     try {
         const {
@@ -25,9 +44,9 @@ router.post("/", async (req,res) => {
             last_name,
             department
         } = req.body;
-        if(!teacher_code || !first_name || !last_name){
+        if(!teacher_code || !first_name || !last_name || !department){
             return res.status(400).json({
-                error: "teacher_code, first_name and last_name are required"
+                error: "teacher_code, first_name, last_name and department are required"
             });
         }
 
@@ -52,6 +71,70 @@ router.post("/", async (req,res) => {
         res.status(500).json({
             error: "Database Error"
         });
+    }
+});
+
+router.put("/:id", async (req,res) => {
+    try {
+        const {
+            teacher_code,
+            first_name,
+            last_name,
+            department
+        } = req.body;
+
+        if(!teacher_code || !first_name || !last_name || !department){
+            return res.status(400).json({
+                error: "teacher_code, first_name, last_name and department are required"
+            });
+        }
+
+        const result = await pool.query(
+            `
+            UPDATE teachers 
+            SET teacher_code = $1, first_name = $2, last_name = $3, department = $4
+            WHERE teacher_id = $5
+            RETURNING *
+            `,
+            [
+                teacher_code,
+                first_name,
+                last_name,
+                department,
+                req.params.id
+            ]
+        );
+
+        if(result.rows.length === 0){
+            return res.status(404).json({ error: "Teacher not found" });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Database Error "});
+    }
+});
+
+router.delete("/:id", async (req,res) => {
+    try {
+        const result = await pool.query(
+            `
+            DELETE FROM teachers
+            WHERE teacher_id = $1
+            RETURNING *
+            `,
+            [req.params.id]
+        );
+
+        if(result.rows.length === 0){
+            return res.status(404).json({ error : "Teacher not found" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Database Error" });
     }
 });
 
