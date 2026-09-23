@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Timetable</title>
+</head>
+<body>
+    <a href="index.html">back</a>
+    <h2>Manage Subjects</h2>
+
+    <input type="text" id="subjectCode" placeholder="Subject Code">
+    <input type="text" id="subjectName" placeholder="Subject Name">
+    <input type="text" id="credits" placeholder="Credits">
+    <input type="text" id="hours" placeholder="Hours Per Week">
+    
+    <br><button id="addSubjects">Add Subjects</button>
+    <br><button id="updateSubjects">Update Subjects</button><br>
+    <br><button id="loadSubjects">Load Subjects</button>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Subject ID</th>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Credits</th>
+                <th>Hours Per Week</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="output">
+
+        </tbody>
+    </table>
+    
+    <script src="js/subject.js"></script>
+</body>
+</html>

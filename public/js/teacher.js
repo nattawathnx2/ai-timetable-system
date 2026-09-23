@@ -66,7 +66,7 @@ async function loadTeachers(){
     // select data teacher in form
     const editButton = document.querySelectorAll(".edit-btn");
     editButton.forEach(button => {
-        button.addEventListener("click", () => {
+        button.addEventListener("click", async () => {
             currentTeacherId = button.dataset.id;
 
             teacherCodeInput.value = button.dataset.code;
