@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Timetable</title>
+</head>
+<body>
+    <a href="index.html">back</a>
+    <h2>Manage Rooms</h2>
+
+    <input type="text" id="roomCode" placeholder="Rooms Code">
+    <input type="text" id="roomName" placeholder="Rooms Name">
+    <input type="text" id="roomType" placeholder="Rooms Type">
+    
+    <br><button id="addRooms">Add Rooms</button>
+    <br><button id="updateRooms">Update Rooms</button><br>
+    <br><button id="loadRooms">Load Rooms</button>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Rooms ID</th>
+                <th>Rooms Code</th>
+                <th>Rooms Name</th>
+                <th>Rooms Type</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="output">
+
+        </tbody>
+    </table>
+    
+    <script src="js/room.js"></script>
+</body>
+</html>
