@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Timetable</title>
+</head>
+<body>
+    <a href="index.html">back</a>
+    <h2>Manage Student-Group</h2>
+
+    <input type="text" id="groupCode" placeholder="Groups Code">
+    <input type="text" id="groupName" placeholder="Groups Name">
+    <input type="text" id="academicYears" placeholder="Academic Years">
+    <input type="text" id="studentConst" placeholder="Student Const">
+    
+    <br><button id="addGroups">Add Groups</button>
+    <br><button id="updateGroups">Update Groups</button><br>
+    <br><button id="loadGroups">Load Groups</button>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Group ID</th>
+                <th>Group Code</th>
+                <th>Group Name</th>
+                <th>Academic Years</th>
+                <th>Const</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="output">
+
+        </tbody>
+    </table>
+    
+    <script src="js/student-group.js"></script>
+</body>
+</html>
