@@ -7,7 +7,8 @@ router.get("/", async (req,res) => {
         const result = await pool.query(
             `
             SELECT 
-                s.schedule_id, s.day_of_week,                
+                s.schedule_id, s.day_of_week, s.start_time, s.end_time,
+                s.teacher_id, s.subject_id, s.room_id, s.group_id,                
                 t.teacher_code, t.first_name, t.last_name,
                 sub.subject_name,
                 r.room_name,
@@ -36,7 +37,8 @@ router.get("/:id", async (req,res) => {
         const result = await pool.query(
             `
             SELECT 
-                s.schedule_id, s.day_of_week,
+                s.schedule_id, s.day_of_week, s.start_time, s.end_time,
+                s.teacher_id, s.subject_id, s.room_id, s.group_id,
                 t.teacher_code, t.first_name, t.last_name,
                 sub.subject_name,
                 r.room_name,
@@ -128,12 +130,12 @@ router.put("/:id", async (req,res) => {
     try {
         const {
             day_of_week,
-                start_time,
-                end_time,
-                teacher_id,
-                subject_id,
-                room_id,
-                group_id
+            start_time,
+            end_time,
+            teacher_id,
+            subject_id,
+            room_id,
+            group_id
         } = req.body;
 
         if(!day_of_week || !start_time || !end_time || !teacher_id || !subject_id || !room_id || !group_id){

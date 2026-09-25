@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Timetable</title>
+</head>
+<body>
+    <h2>Add Schedules</h2>
+
+    <select id="teacherSelect">
+        <option value="">Select Teacher</option>
+    </select>
+
+    <select id="subjectSelect">
+        <option value="">Select Subject</option>
+    </select>
+
+    <select id="roomSelect">
+        <option value="">Select Room</option>
+    </select>
+
+    <select id="groupSelect">
+        <option value="">Select Group</option>
+    </select>
+
+    <select id="dayOfWeek">
+        <option value="">Select Day</option>
+        <option value="Monday">Moaday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+    </select>
+
+    <input type="time" id="startTime">
+
+    <input type="time" id="endTime">
+
+    <button id="addSchedules">Add Schedule</button>
+    <button id="updateSchedules">Update Schedule</button>
+
+    <hr>
+
+    <button id="loadSchedules">Load Schedule</button>
+
+    <table border="1">
+        <thead>
+            <th>ID</th>
+            <th>Day</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Teacher</th>
+            <th>Subject</th>
+            <th>Room</th>
+            <th>Group</th>
+            <th>Action</th>
+            <th>Action</th>
+        </thead>
+
+        <tbody id="output">
+        </tbody>
+    </table>
+
+    <script src="js/schedules.js"></script>
+</body>
+</html>
