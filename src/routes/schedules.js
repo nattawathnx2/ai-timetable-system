@@ -102,6 +102,81 @@ router.post("/", async (req,res) => {
             });
         }
 
+        if(start_time >= end_time){
+            return res.status(400).json({
+                error: "End time must be later than start time"
+            });
+        }
+
+        const teacherConflict = await pool.query(
+            `
+            SELECT *
+            FROM schedules
+            WHERE day_of_week = $1
+            AND teacher_id = $2
+            AND start_time < $3
+            AND end_time > $4
+            `,
+            [
+                day_of_week,
+                teacher_id,
+                end_time,
+                start_time
+            ]
+        );
+
+        if(teacherConflict.rows.length > 0){
+            return res.status(400).json({
+                error: "Teacher already has a class at this time"
+            })
+        }
+
+        const roomConflict = await pool.query(
+            `
+            SELECT *
+            FROM schedules
+            WHERE day_of_week = $1
+            AND room_id = $2
+            AND start_time < $3
+            AND end_time > $4
+            `,
+            [
+                day_of_week,
+                room_id,
+                end_time,
+                start_time
+            ]
+        );
+
+        if(roomConflict.rows.length > 0){
+            return res.status(400).json({
+                error: "Room already has a class at this time"
+            });
+        }
+
+        const groupConflict = await pool.query(
+            `
+            SELECT *
+            FROM schedules
+            WHERE day_of_week = $1
+            AND group_id = $2
+            AND start_time < $3
+            AND end_time > $4
+            `,
+            [
+                day_of_week,
+                group_id,
+                end_time,
+                start_time
+            ]
+        );
+
+        if(groupConflict.rows.length > 0){
+            return res.status(400).json({
+                error: "Group already has a class at this time"
+            });
+        }
+
         const result = await pool.query(
             `
             INSERT INTO schedules
@@ -141,6 +216,87 @@ router.put("/:id", async (req,res) => {
         if(!day_of_week || !start_time || !end_time || !teacher_id || !subject_id || !room_id || !group_id){
             return res.status(400).json({
                 error: "The information received is incomplete!"
+            });
+        }
+
+        if(start_time >= end_time){
+            return res.status(400).json({
+                error: "End time must be later than start time"
+            });
+        }
+
+        const teacherConflict = await pool.query(
+            `
+            SELECT *
+            FROM schedules
+            WHERE day_of_week = $1
+            AND teacher_id = $2
+            AND start_time < $3
+            AND end_time > $4
+            AND schedule_id != $5
+            `,
+            [
+                day_of_week,
+                teacher_id,
+                end_time,
+                start_time,
+                req.params.id
+            ]
+        );
+
+        if(teacherConflict.rows.length > 0){
+            return res.status(400).json({
+                error: "Teacher already has a class at this time"
+            })
+        }
+
+        const roomConflict = await pool.query(
+            `
+            SELECT *
+            FROM schedules
+            WHERE day_of_week = $1
+            AND room_id = $2
+            AND start_time < $3
+            AND end_time > $4
+            AND schedule_id != $5
+            `,
+            [
+                day_of_week,
+                room_id,
+                end_time,
+                start_time,
+                req.params.id
+            ]
+        );
+
+        if(roomConflict.rows.length > 0){
+            return res.status(400).json({
+                error: "Room already has a class at this time"
+            });
+        }
+
+        const groupConflict = await pool.query(
+            `
+            SELECT *
+            FROM schedules
+            WHERE day_of_week = $1
+            AND group_id = $2
+            AND start_time < $3
+            AND end_time > $4
+            AND schedule_id != $5
+            `,
+            [
+                day_of_week,
+                group_id,
+                end_time,
+                start_time,
+                req.params.id
+            ]
+        );
+
+        if(groupConflict.rows.length > 0){
+            return res.status(400).json({
+                error: "Group already has a class at this time"
             });
         }
 
