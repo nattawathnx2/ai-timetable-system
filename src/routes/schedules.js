@@ -4,27 +4,56 @@ const pool = require("../db/connection");
 
 router.get("/", async (req,res) => {
     try {
-        const result = await pool.query(
-            `
-            SELECT 
-                s.schedule_id, s.day_of_week, s.start_time, s.end_time,
-                s.teacher_id, s.subject_id, s.room_id, s.group_id,                
-                t.teacher_code, t.first_name, t.last_name,
-                sub.subject_name,
-                r.room_name,
-                g.group_name
-            FROM schedules s
-            JOIN teachers t
-                ON s.teacher_id = t.teacher_id
-            JOIN subjects sub
-                ON s.subject_id = sub.subject_id
-            JOIN rooms r
-                ON s.room_id = r.room_id
-            JOIN student_groups g
-                ON s.group_id = g.group_id
-            ORDER BY s.schedule_id;
-            `
-        );
+        const teacherId = req.query.teacher_id;
+        console.log(teacherId);
+        let result;
+        if(teacherId){
+            result = await pool.query(
+                `
+                SELECT 
+                    s.schedule_id, s.day_of_week, s.start_time, s.end_time,
+                    s.teacher_id, s.subject_id, s.room_id, s.group_id,                
+                    t.teacher_code, t.first_name, t.last_name,
+                    sub.subject_name,
+                    r.room_name,
+                    g.group_name
+                FROM schedules s
+                JOIN teachers t
+                    ON s.teacher_id = t.teacher_id
+                JOIN subjects sub
+                    ON s.subject_id = sub.subject_id
+                JOIN rooms r
+                    ON s.room_id = r.room_id
+                JOIN student_groups g
+                    ON s.group_id = g.group_id
+                WHERE s.teacher_id = $1
+                ORDER BY s.schedule_id;
+                `,
+                [teacherId]
+            );
+        }else{
+            result = await pool.query(
+                `
+                SELECT 
+                    s.schedule_id, s.day_of_week, s.start_time, s.end_time,
+                    s.teacher_id, s.subject_id, s.room_id, s.group_id,                
+                    t.teacher_code, t.first_name, t.last_name,
+                    sub.subject_name,
+                    r.room_name,
+                    g.group_name
+                FROM schedules s
+                JOIN teachers t
+                    ON s.teacher_id = t.teacher_id
+                JOIN subjects sub
+                    ON s.subject_id = sub.subject_id
+                JOIN rooms r
+                    ON s.room_id = r.room_id
+                JOIN student_groups g
+                    ON s.group_id = g.group_id
+                ORDER BY s.schedule_id;
+                `
+            );
+        }
         res.json(result.rows);
     } catch (error) {
         console.error(error);

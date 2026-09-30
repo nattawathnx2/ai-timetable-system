@@ -6,7 +6,9 @@ button.addEventListener("click", async () => {
 });
 
 async function loadTimetable(){
-    const response = await fetch("/schedules");
+    const teacherId = teacherSelect.value;
+    console.log("Teacher ID =", teacherId);
+    const response = await fetch(`/schedules?teacher_id=${teacherId}`);
     const data = await response.json();
     output.innerHTML = "";
     for(const schedule of data){
@@ -31,4 +33,20 @@ async function loadTimetable(){
     }
 }
 
-loadTimetable();
+const teacherSelect = document.getElementById("teacherSelect");
+
+async function loadTeacherSelect(){
+    const response = await fetch("/teachers");
+    const data = await response.json();
+    teacherSelect.innerHTML = `<option value="">Select Teacher</option>`;
+
+    for(const teacher of data){
+        teacherSelect.innerHTML += `
+            <option value="${teacher.teacher_id}">
+                ${teacher.teacher_code} ${teacher.first_name} ${teacher.last_name}
+            </option>
+        `;
+    }
+}
+
+loadTeacherSelect();
