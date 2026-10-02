@@ -13,27 +13,58 @@ async function loadTimetable(){
     console.log("Teacher ID =", teacherId);
     const response = await fetch(`/schedules?teacher_id=${teacherId}&subject_id=${subjectId}&room_id=${roomId}&group_id=${groupId}`);
     const data = await response.json();
-    output.innerHTML = "";
+    const timeSlot = new Set();
+    const daySlot = new Set();
     for(const schedule of data){
-        output.innerHTML += `
+        const Tslot = `${schedule.start_time} - ${schedule.end_time}`;
+        timeSlot.add(Tslot);
+        daySlot.add(schedule.day_of_week);
+    }
+    const timeSlots = [...timeSlot];
+    const daySlots = [...daySlot];
+    console.log(timeSlot);
+    console.log(daySlot);
+
+    let tableHtml = `
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Time</th>
+    `;
+
+    for(const day of daySlots){
+        tableHtml += `
+            <th>${day}</th>
+        `;
+    }
+
+    tableHtml += `
+                </tr>
+            </thead>
+        <tbody>
+    `;
+
+    for(const time of timeSlots){
+        tableHtml += `
             <tr>
-                <td>${schedule.day_of_week}</td>
-                <td>
-                    ${schedule.start_time}
-                    -
-                    ${schedule.end_time}
-                </td>
-                <td>${schedule.subject_name}</td>
-                <td>
-                    ${schedule.teacher_code}
-                    ${schedule.first_name}
-                    ${schedule.last_name}
-                </td>
-                <td>${schedule.room_name}</td>
-                <td>${schedule.group_name}</td>
+                <td>${time}</td>
+        `;
+
+        for(const day of daySlots){
+            tableHtml += `
+                <td>-</td>
+            `;
+        }
+        tableHtml += `
             </tr>
         `;
     }
+    tableHtml += `
+            </tbody>
+        </table>
+    `;
+
+    output.innerHTML = tableHtml;
 }
 
 const teacherSelect = document.getElementById("teacherSelect");
