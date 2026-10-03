@@ -120,7 +120,7 @@ addButton.addEventListener("click", async () => {
     const subjectData = {
         subject_code: subjectCodeInput.value,
         subject_name: subjectNameInput.value,
-        credits: CreditsInput.value,
+        credits: creditsInput.value,
         hours_per_week: hoursInput.value
     };
 

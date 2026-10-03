@@ -51,8 +51,22 @@ async function loadTimetable(){
         `;
 
         for(const day of daySlots){
+            const currentSchedule = data.find(schedule => {
+                const slot = `${schedule.start_time} - ${schedule.end_time}`;
+                return (
+                    schedule.day_of_week === day && slot === time  
+                );
+            });
+
             tableHtml += `
-                <td>-</td>
+                <td>
+                    ${currentSchedule ? `
+                        ${currentSchedule.subject_name}<br>
+                        ${currentSchedule.first_name}
+                        `
+                        : "-"
+                    }
+                </td>
             `;
         }
         tableHtml += `
