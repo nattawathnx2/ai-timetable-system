@@ -22,8 +22,25 @@ async function loadTimetable(){
     }
     const timeSlots = [...timeSlot];
     const daySlots = [...daySlot];
-    console.log(timeSlot);
-    console.log(daySlot);
+    const dayOrder = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+    ];
+    daySlots.sort((a, b) => {
+        return dayOrder.indexOf(a) - dayOrder.indexOf(b);
+    });
+    timeSlots.sort((a,b) => {
+        const startA = a.split(" - ")[0];
+        const startB = b.split(" - ")[0];
+
+        return startA.localeCompare(startB);
+    });
+
+    console.log(timeSlots);
+    console.log(daySlots);
 
     let tableHtml = `
         <table border="1">
@@ -62,7 +79,8 @@ async function loadTimetable(){
                 <td>
                     ${currentSchedule ? `
                         ${currentSchedule.subject_name}<br>
-                        ${currentSchedule.first_name}
+                        ${currentSchedule.first_name} ${currentSchedule.last_name}<br>
+                        ${currentSchedule.room_name}
                         `
                         : "-"
                     }
