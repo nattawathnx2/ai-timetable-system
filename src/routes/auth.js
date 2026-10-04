@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require("../db/connection");
+const bcrypt = require("bcrypt");
 
 router.post("/login", async (req,res) => {
     try {
@@ -20,7 +21,11 @@ router.post("/login", async (req,res) => {
         }
 
         const user = result.rows[0];
-        if(user.password_hash !== password){
+        const isMatch = await bcrypt.compare(
+            password,
+            user.password_hash
+        );
+        if(!isMatch){
             return res.status(401).json({
                 error: "Invalid username or password"
             });
